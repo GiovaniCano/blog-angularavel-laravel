@@ -18,7 +18,15 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('email/verify', [AuthController::class, 'emailverify'])->middleware('auth:sanctum');
-/* 404 */
-// Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request $request) { return $request->user(); });
+
+/* tests */
+Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request $request) { return $request->user(); });
+
+/* 404 and disabled Fortify routes */
+Route::get('/reset-password/{token}', function(){
+    return response('Page Not Found', 404);
+})->middleware(['guest:'.config('fortify.guard')])->name('password.reset');
+
 Route::get('email/verify/{id}/{hash}', function() { return response('Page Not Found', 404); });
+
 Route::fallback( function(){ return response('Page Not Found', 404); } );

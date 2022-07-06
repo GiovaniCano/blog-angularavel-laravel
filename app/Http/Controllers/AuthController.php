@@ -14,7 +14,7 @@ class AuthController extends Controller
 
         $request->validate(['token'=>'required|string']);
 
-        $token_lifetime = 300; //5 min
+        $token_lifetime = 900; // 15 min
 
         $response = [['message'=>'Invalid token'], 422]; //default error
         try {

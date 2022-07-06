@@ -6,6 +6,7 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -54,5 +55,10 @@ class FortifyServiceProvider extends ServiceProvider
             return env('SPA_URL') . '/email/verify/' . $token;
         });
 
+        ResetPassword::createUrlUsing(function ($user, string $token) {
+            return env('SPA_URL') . '/reset-password/' . $token . '?email=' . urlencode($user->email);
+        });
+
     }
 }
+// http://127.0.0.1:8000/api/reset-password/3aef263199b44ca7491cde34e982bc425d51a5b26a399cb9d32a4168ce1d6eb5?email=lorem%40ipsum.com
