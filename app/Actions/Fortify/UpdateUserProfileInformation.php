@@ -4,11 +4,11 @@ namespace App\Actions\Fortify;
 
 use App\Rules\Alpha_num_extras;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
+use Intervention\Image\Facades\Image;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
@@ -43,7 +43,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             }
 
             $image_file = $input['avatar'];
-            $image_name = time() .'-'. uniqid() .'.'.$image_file->extension();
+            $image_name = time() .'-'. uniqid() . '.webp';
             $input['avatar'] = $image_name;
         }
 
@@ -62,7 +62,10 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
         /* [avatar] Save image after db update */
         if($input['avatar'] ?? false) {
-            Storage::disk('avatars')->put($image_name, File::get($image_file));
+            $img = Image::make($image_file->path());
+            $img->fit(60,60);
+            $img->encode('webp',95);
+            Storage::disk('avatars')->put($image_name, $img);
         }
     }
 
