@@ -18,10 +18,14 @@ class UserController extends Controller
         unset($user->email_verified_at);
         unset($user->created_at);
         unset($user->updated_at);
-        return $user;
+        return $user->load('posts');
     }
 
     function getAvatar($avatar) {
-        return Storage::disk('avatars')->get($avatar);
+        if(Storage::disk('avatars')->exists($avatar)) {
+            return Storage::disk('avatars')->get($avatar);
+        } else {
+            return response(null, 404);
+        }
     }
 }

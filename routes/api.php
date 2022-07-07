@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\PostsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,15 +18,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-
-Route::post('email/verify', [AuthController::class, 'emailverify'])->middleware('auth:sanctum');
+Route::get('post/categories', [CategoriesController::class, 'index']);
+Route::get('post/category/{id}', [PostsController::class, 'filterByCategory']);
+Route::get('post/image/{image}', [PostsController::class, 'getImage']);
+Route::apiResource('post', PostsController::class); //->middleware(['auth:sanctum', 'verified'])
 
 Route::controller(UserController::class)->group(function(){
     Route::get('user/current', 'current')->middleware(['auth:sanctum', 'verified']);
     Route::get('user/{id}', 'getUser');
     Route::get('user/avatar/{avatar}', 'getAvatar');
 });
+
+Route::post('email/verify', [AuthController::class, 'emailverify'])->middleware('auth:sanctum');
 
 /* tests */
 // Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request $request) { return $request->user(); });

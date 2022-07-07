@@ -32,7 +32,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 Rule::unique('users')->ignore($user->id),
             ],
             'description' => ['string', 'max:255', ],
-            'avatar' =>['mimes:jpg,jpeg,png,webp', 'max:2000', 'dimensions:max_width=2000,max_height=2000'], // 2000kb = 2mb
+            'avatar' =>['mimes:jpg,jpeg,png,webp', 'max:2000'], // 2000kb = 2mb
         ])->validateWithBag('updateProfileInformation');
 
         /* [avatar] delete previous image and make new name */
