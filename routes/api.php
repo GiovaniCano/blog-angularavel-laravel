@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,8 +20,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('email/verify', [AuthController::class, 'emailverify'])->middleware('auth:sanctum');
 
+Route::controller(UserController::class)->group(function(){
+    Route::get('user/current', 'current')->middleware(['auth:sanctum', 'verified']);
+    Route::get('user/{id}', 'getUser');
+    Route::get('user/avatar/{avatar}', 'getAvatar');
+});
+
 /* tests */
-Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request $request) { return $request->user(); });
+// Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request $request) { return $request->user(); });
 
 /* 404 and disabled Fortify routes */
 Route::get('/reset-password/{token}', function(){
