@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -24,7 +26,24 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->instance(LoginResponse::class, new class implements LoginResponse {
+            public function toResponse($request)
+            {
+                return response()->json([
+                    'two_factor' => Fortify::confirmsTwoFactorAuthentication(),
+                    'user' => $request->user()
+                ]);
+            }
+        });
+        $this->app->instance(RegisterResponse::class, new class implements RegisterResponse {
+            public function toResponse($request)
+            {
+                $user = $request->user();
+                $user->email_verified_at = null; //to easily use response in frontend
+                $user->avatar = null; //to easily use response in frontend
+                return response()->json( $user, 201 );
+            }
+        });
     }
 
     /**
@@ -61,4 +80,3 @@ class FortifyServiceProvider extends ServiceProvider
 
     }
 }
-// http://127.0.0.1:8000/api/reset-password/3aef263199b44ca7491cde34e982bc425d51a5b26a399cb9d32a4168ce1d6eb5?email=lorem%40ipsum.com

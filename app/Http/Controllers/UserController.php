@@ -3,11 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
 class UserController extends Controller
 {
+    /**
+     * Update the user's profile information.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Laravel\Fortify\Contracts\UpdatesUserProfileInformation  $updater
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, UpdatesUserProfileInformation $updater)
+    {
+        $updater->update($request->user(), $request->all());
+
+        return new JsonResponse($request->user(), 200);
+    }
+
     function current() {
         return response()->json( auth()->user() );
     }
