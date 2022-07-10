@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 class UserController extends Controller
 {
     function current() {
-        return auth()->user();
+        return response()->json( auth()->user() );
     }
 
     function getUser($id) {
@@ -18,7 +18,7 @@ class UserController extends Controller
         unset($user->email_verified_at);
         unset($user->created_at);
         unset($user->updated_at);
-        return $user->load('posts');
+        return response()->json( $user->load('posts') );
     }
 
     function getAvatar($avatar) {
@@ -27,5 +27,13 @@ class UserController extends Controller
         } else {
             return response(null, 404);
         }
+    }
+
+    function destroy(Request $request) {
+        $request->validate(['password' => 'required|current_password:web']);
+
+        $request->user()->delete();
+
+        return response(null);
     }
 }

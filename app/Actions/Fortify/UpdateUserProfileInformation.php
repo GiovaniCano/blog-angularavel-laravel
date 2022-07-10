@@ -44,7 +44,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
             $image_file = $input['avatar'];
             $image_name = time() .'-'. uniqid() . '.webp';
-            $input['avatar'] = $image_name;
+            $user->avatar = $image_name;
         }
 
         /* Save to Db */
@@ -56,7 +56,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'name' => $input['name'],
                 'email' => $input['email'],
                 'description' => $input['description'],
-                'avatar' => $input['avatar'],
+                // 'avatar',
             ])->save();
         }
 
@@ -82,7 +82,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'name' => $input['name'],
             'email' => $input['email'],
             'description' => $input['description'],
-            'avatar' => $input['avatar'],
+            // 'avatar',
             'email_verified_at' => null,
         ])->save();
 

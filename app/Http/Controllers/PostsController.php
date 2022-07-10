@@ -22,7 +22,7 @@ class PostsController extends Controller
     public function index()
     {
         // return Post::all()->load(['category', 'user']);
-        return Post::with(['category', 'user'])->get();
+        return response()->json( Post::with(['category', 'user'])->get() );
     }
 
     /**
@@ -56,7 +56,7 @@ class PostsController extends Controller
         $img->encode('webp');
         Storage::disk('posts')->put($image_name, $img);
 
-        return response($post->load(['category', 'user']), 201);
+        return response()->json( $post->load(['category', 'user']), 201 );
     }
 
     /**
@@ -67,7 +67,7 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        return Post::findOrFail($id)->load(['category', 'user']);
+        return response()->json( Post::findOrFail($id)->load(['category', 'user']) );
     }
 
     public function getImage($image) {
@@ -119,7 +119,7 @@ class PostsController extends Controller
             Storage::disk('posts')->put($image_name, $img);    
         }
 
-        return response($post->load(['category', 'user']), 200);
+        return response()->json( $post->load(['category', 'user']) );
     }
 
     /**
@@ -132,10 +132,11 @@ class PostsController extends Controller
     {
         $post = Post::where(['id'=>$id, 'user_id'=>auth()->id()])->firstOrFail();
         $post->delete();
+        return response(null);
     }
 
     function filterByCategory($id) {
         $category = Category::findOrFail($id);
-        return $category->load(['posts.category', 'posts.user']);
+        return response()->json( $category->load(['posts.category', 'posts.user']) );
     }
 }

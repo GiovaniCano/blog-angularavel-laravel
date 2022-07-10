@@ -9,14 +9,14 @@ class AuthController extends Controller
 {
     public function emailverify(Request $request) {
         if($request->user()->email_verified_at) {
-            return response()->json(['message' => 'Email already verified'], 400);
+            return response()->json( ['message' => 'Email already verified'] );
         }
 
         $request->validate(['token'=>'required|string']);
 
         $token_lifetime = 900; // 15 min
 
-        $response = [['message'=>'Invalid token'], 422]; //default error
+        $response = [ ['message'=>'Invalid token'], 422 ]; //default error
         try {
             $payload = explode('.', Crypt::decryptString($request->token));
             $token_user_id = intval($payload[0]);
@@ -32,6 +32,6 @@ class AuthController extends Controller
             //throw $th;
         }
 
-        return response()->json($response[0], $response[1]);
+        return response()->json( $response[0], $response[1] );
     }
 }

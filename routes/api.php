@@ -24,9 +24,10 @@ Route::get('post/image/{image}', [PostsController::class, 'getImage']);
 Route::apiResource('post', PostsController::class); //->middleware(['auth:sanctum', 'verified'])
 
 Route::controller(UserController::class)->group(function(){
-    Route::get('user/current', 'current')->middleware(['auth:sanctum', 'verified']);
+    Route::get('user/current', 'current')->middleware('auth:sanctum');
     Route::get('user/{id}', 'getUser');
     Route::get('user/avatar/{avatar}', 'getAvatar');
+    Route::delete('user/delete', 'destroy')->middleware('auth:sanctum');
 });
 
 Route::post('email/verify', [AuthController::class, 'emailverify'])->middleware('auth:sanctum');
