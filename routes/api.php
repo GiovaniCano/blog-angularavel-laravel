@@ -28,6 +28,7 @@ Route::controller(UserController::class)->group(function(){
     Route::get('user/{id}', 'getUser');
     Route::get('user/avatar/{avatar}', 'getAvatar');
     Route::delete('user/delete', 'destroy')->middleware('auth:sanctum');
+    Route::delete('user/avatar', 'deleteAvatar')->middleware('auth:sanctum');
 });
 
 Route::post('email/verify', [AuthController::class, 'emailverify'])->middleware('auth:sanctum');

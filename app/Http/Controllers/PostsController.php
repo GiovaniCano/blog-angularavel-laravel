@@ -131,6 +131,7 @@ class PostsController extends Controller
     public function destroy($id)
     {
         $post = Post::where(['id'=>$id, 'user_id'=>auth()->id()])->firstOrFail();
+        if($post->image) Storage::disk('posts')->delete($post->image);
         $post->delete();
         return response(null);
     }

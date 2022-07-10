@@ -29,10 +29,26 @@ class UserController extends Controller
         }
     }
 
+    function deleteAvatar(Request $request) {
+        $user = $request->user();
+
+        if($user->avatar) {
+            Storage::disk('avatars')->delete( $user->avatar );
+            $user->avatar = null;
+            $user->update();
+        }
+
+        return response(null);
+    }
+
     function destroy(Request $request) {
         $request->validate(['password' => 'required|current_password:web']);
 
-        $request->user()->delete();
+        $user = $request->user();
+
+        if($user->avatar) Storage::disk('avatars')->delete( $user->avatar );
+
+        $user->delete();
 
         return response(null);
     }
