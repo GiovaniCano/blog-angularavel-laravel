@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -33,5 +35,22 @@ class AuthController extends Controller
         }
 
         return response()->json( $response[0], $response[1] );
+    }
+
+    function isEmailAvailable(Request $request) {
+        $rules = $request->user() ? ['email' => 'required|unique:users,email,'.$request->user()->id] : ['email' => 'required|unique:users,email'];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()) return response()->json(false, 200);
+        return response()->json(true, 200);
+    }
+    function isUsernameAvailable(Request $request) {
+        $rules = $request->user() ? ['name' => 'required|unique:users,name,'.$request->user()->id] : ['name' => 'required|unique:users,name'];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()) return response()->json(false, 200);
+        return response()->json(true, 200);
     }
 }

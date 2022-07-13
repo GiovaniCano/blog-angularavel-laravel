@@ -33,6 +33,8 @@ Route::controller(UserController::class)->group(function(){
 });
 
 Route::post('email/verify', [AuthController::class, 'emailverify'])->middleware('auth:sanctum');
+Route::post('forms/isEmailAvailable', [AuthController::class, 'isEmailAvailable']);
+Route::post('forms/isUsernameAvailable', [AuthController::class, 'isUsernameAvailable']);
 
 /* tests */
 // Route::middleware(['auth:sanctum', 'verified'])->get('/user', function (Request $request) { return $request->user(); });

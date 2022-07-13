@@ -24,7 +24,6 @@ trait PasswordValidationRules
                 ->mixedCase()
                 ->numbers()
                 ->symbols()
-                ->uncompromised(3)
         ];
     }
 }

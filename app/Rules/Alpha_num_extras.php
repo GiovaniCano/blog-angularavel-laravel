@@ -25,7 +25,7 @@ class Alpha_num_extras implements Rule
      */
     public function passes($attribute, $value)
     {
-        return preg_match("/^[\pL\pN\s'_-]*$/u", $value);
+        return preg_match("/^[\pL\pN\s'._-]*$/u", $value);
         /*
             \pL letras cualquier lenguaje
             \pN numeros
@@ -45,6 +45,6 @@ class Alpha_num_extras implements Rule
      */
     public function message()
     {
-        return 'The :attribute may only contain letters, numbers, spaces, dashes and underscores.';
+        return 'The :attribute may only contain letters, numbers, spaces, dashes, underscores and dots.';
     }
 }
