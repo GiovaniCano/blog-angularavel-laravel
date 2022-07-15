@@ -75,7 +75,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         ResetPassword::createUrlUsing(function ($user, string $token) {
-            return env('SPA_URL') . '/reset-password/' . $token . '?email=' . urlencode($user->email);
+            return env('SPA_URL') . '/password/reset/' . $token . '?email=' . urlencode($user->email);
         });
 
     }
