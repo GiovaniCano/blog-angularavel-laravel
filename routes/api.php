@@ -25,7 +25,7 @@ Route::apiResource('post', PostsController::class); //->middleware(['auth:sanctu
 
 Route::controller(UserController::class)->group(function(){
     Route::get('user/current', 'current')->middleware('auth:sanctum');
-    Route::get('user/{id}', 'getUser');
+    Route::get('user/{name}', 'getUser');
     Route::get('user/avatar/{avatar}', 'getAvatar');
     Route::delete('user/delete', 'destroy')->middleware('auth:sanctum');
     Route::delete('user/avatar', 'deleteAvatar')->middleware('auth:sanctum');

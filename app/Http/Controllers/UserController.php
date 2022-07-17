@@ -19,17 +19,22 @@ class UserController extends Controller
      */
     public function update(Request $request, UpdatesUserProfileInformation $updater)
     {
+        $email = $request->user()->email;
+        
         $updater->update($request->user(), $request->all());
 
-        return new JsonResponse($request->user(), 200);
+        return new JsonResponse([
+            'mustVerifyEmail' => $request->user()->email !== $email,
+            'user' => $request->user()
+        ], 200);
     }
 
     function current() {
         return response()->json( auth()->user() );
     }
 
-    function getUser($id) {
-        $user = User::findOrFail($id);
+    function getUser($name) {
+        $user = User::where('name', $name)->firstOrFail();
         unset($user->email);
         unset($user->email_verified_at);
         unset($user->created_at);
