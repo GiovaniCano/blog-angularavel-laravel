@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -67,8 +68,12 @@ class UserController extends Controller
 
         $user = $request->user();
 
-        if($user->avatar) Storage::disk('avatars')->delete( $user->avatar );
+        $images = Post::select('image')->where('user_id', $user->id)->get();
+        foreach($images as $image) {
+            Storage::disk('posts')->delete($image->image);
+        }
 
+        if($user->avatar) Storage::disk('avatars')->delete( $user->avatar );
         $user->delete();
 
         return response(null);

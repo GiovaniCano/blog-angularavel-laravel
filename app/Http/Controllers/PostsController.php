@@ -12,8 +12,15 @@ class PostsController extends Controller
 {
     function __construct()
     {
-        $this->middleware(['auth:sanctum', 'verified'])->except('index', 'show', 'getImage', 'filterByCategory');
+        $this->middleware(['auth:sanctum', 'verified'])->except(
+            // 'index', 
+            'indexPagination', 
+            'show', 
+            'getImage', 
+            'filterByCategory'
+        );
     }
+
     /**
      * Display a listing of the resource.
      *
