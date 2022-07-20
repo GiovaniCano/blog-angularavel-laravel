@@ -63,7 +63,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         /* [avatar] Save image after db update */
         if($input['avatar'] ?? false) {
             $img = Image::make($image_file->path());
-            $img->fit(60,60);
+            $img->fit(250,250);
             $img->encode('webp',95);
             Storage::disk('avatars')->put($image_name, $img);
         }

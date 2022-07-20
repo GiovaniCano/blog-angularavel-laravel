@@ -19,8 +19,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('post/categories', [CategoriesController::class, 'index']);
-Route::get('post/category/{id}', [PostsController::class, 'filterByCategory']);
 Route::get('post/image/{image}', [PostsController::class, 'getImage']);
+Route::get('post/category/{id}/{from}', [PostsController::class, 'filterByCategory']);
+Route::get('post/pagination/{from}', [PostsController::class, 'indexPagination']);
 Route::apiResource('post', PostsController::class); //->middleware(['auth:sanctum', 'verified'])
 
 Route::controller(UserController::class)->group(function(){

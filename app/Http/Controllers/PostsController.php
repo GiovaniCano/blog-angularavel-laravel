@@ -24,6 +24,20 @@ class PostsController extends Controller
         // return Post::all()->load(['category', 'user']);
         return response()->json( Post::with(['category', 'user'])->get() );
     }
+    public function indexPagination($from) {
+        if(!is_numeric($from) || $from < 0) return response('', 422);
+        
+        $count = Post::count();
+        // $posts = Post::with(['category', 'user'])->skip($from)->take(6)->get();
+        $posts = Post::skip($from)->take(6)->get();
+
+        if(!$posts->count()) return response('', 404);
+
+        return response()->json([
+            'count' => $count,
+            'posts' => $posts
+        ]);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -136,8 +150,20 @@ class PostsController extends Controller
         return response(null);
     }
 
-    function filterByCategory($id) {
+    function filterByCategory($id, $from) {
+        if(!is_numeric($from) || $from < 0) return response('', 422);
+
         $category = Category::findOrFail($id);
-        return response()->json( $category->load(['posts.category', 'posts.user']) );
+        
+        $count = Post::where('category_id', $id)->count();
+        $posts = Post::where('category_id', $id)->skip($from)->take(6)->get();
+        
+        if(!$posts->count()) return response('', 404);
+
+        return response()->json([
+            'category' => $category,
+            'count' => $count,
+            'posts' => $posts
+        ]);
     }
 }
