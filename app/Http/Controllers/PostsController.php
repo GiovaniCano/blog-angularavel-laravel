@@ -29,14 +29,15 @@ class PostsController extends Controller
     public function index()
     {
         // return Post::all()->load(['category', 'user']);
-        return response()->json( Post::with(['category', 'user'])->get() );
+        // return response()->json( Post::with(['category', 'user'])->get() );
+        return response(Post::all());
     }
     public function indexPagination($from) {
         if(!is_numeric($from) || $from < 0) return response('', 422);
         
         $count = Post::count();
         // $posts = Post::with(['category', 'user'])->skip($from)->take(6)->get();
-        $posts = Post::skip($from)->take(6)->get();
+        $posts = Post::orderBy('id', 'desc')->skip($from)->take(6)->get();
 
         if(!$posts->count()) return response('', 404);
 
@@ -163,7 +164,7 @@ class PostsController extends Controller
         $category = Category::findOrFail($id);
         
         $count = Post::where('category_id', $id)->count();
-        $posts = Post::where('category_id', $id)->skip($from)->take(6)->get();
+        $posts = Post::where('category_id', $id)->orderBy('id', 'desc')->skip($from)->take(6)->get();
         
         if(!$posts->count()) return response('', 404);
 

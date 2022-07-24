@@ -40,7 +40,9 @@ class UserController extends Controller
         unset($user->email_verified_at);
         unset($user->created_at);
         unset($user->updated_at);
-        return response()->json( $user->load('posts') );
+        return response()->json( $user->load(['posts' => function($query) {
+            $query->orderBy('id', 'desc');
+        }]) );
     }
 
     function getAvatar($avatar) {
